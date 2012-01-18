@@ -14,6 +14,7 @@ simsuccess <- function(){
 
 defdata <- read.table(deffile, fill=TRUE, header=TRUE, colClasses="character")
 rownames(defdata) <- tolower(defdata$parname)
+defdata$parname <- tolower(defdata$parname)
 defdata$namelist[defdata$namelist == ""] <- NA
 
 # Read the .csv file with parameters:

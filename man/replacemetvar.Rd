@@ -6,9 +6,11 @@
   Replaces one (or more) of the weather variables in the met.dat file. 
 }
 \usage{
-replacemetvar(replacevar, newvalues, oldmetfile="met.dat", newmetfile="metNEW.dat")
+replacemetvar(replacevar, newvalues, oldmetfile="met.dat", 
+	newmetfile="metNEW.dat")
 
-replacemetdata(metdfr, oldmetfile = "met.dat", columns = NA, newmetfile = "met.dat", khrs = NA)
+replacemetdata(metdfr, oldmetfile = "met.dat", columns = NA, 
+	newmetfile = "met.dat", khrs = NA)
 }
 \arguments{
   \item{replacevar}{ Character. Name(s) of the variable to be replaced.}

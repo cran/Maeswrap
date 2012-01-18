@@ -3,9 +3,11 @@ Plotstand <- function(treesfile="trees.dat",
 					  crownshape=c("cone","ellipsoid","round","halfellipsoid","paraboloid","cylinder"), 
 					  readstrfiles=TRUE,
 					  targethighlight=TRUE,
-					  addNarrow=TRUE, xyaxes=TRUE,labcex=1,axiscex=1,...){
+					  addNarrow=TRUE, xyaxes=TRUE,labcex=1,axiscex=1,verbose=FALSE,...){
 
-    notrees <- readPAR(treesfile, "notrees", "plot")
+
+	notrees <- readPAR(treesfile, "notrees", "plot")
+	
 	crownshapes <- rep(NA,notrees)
 	
 	haveconfile <- file.exists("confile.dat")
@@ -24,9 +26,10 @@ Plotstand <- function(treesfile="trees.dat",
 		} else crowncolors[itargets] <- "red"
 	}
 	
-	if(!haveconfile)
+	if(!haveconfile){
 		warning("Guessing str file is str.dat\n")
-	else {
+		strfiles <- "str.dat"
+	} else {
 		strfiles <- readPAR("confile.dat","strfiles",fail=FALSE)
 		if(all(is.na(strfiles)))
 			strfiles <- "str.dat"
@@ -42,7 +45,6 @@ Plotstand <- function(treesfile="trees.dat",
             species <- rep(1,notrees)
         }
         #stop("Species namelist not found!")
-		
 		for(i in 1:notrees)crownshapes[i] <- tolower(readPAR(strfiles[species[i]],"cshape","canopy"))
 		crownshapes <- gsub("'","",crownshapes)
 	
@@ -72,14 +74,18 @@ Plotstand <- function(treesfile="trees.dat",
 	Openstand(treesfile)
 	
     for(i in 1:notrees){
+		if(verbose)message("Plotting tree number : ", i)
         plottree(crownshape=crownshapes[i], CL=CL[i], CW=CW[i], 
             HCB=HCB[i], X=X[i], Y=Y[i], dbh=DBH[i], crowncolor=crowncolors[i],...)
     }
 	if(addNarrow){
-		X0 <- try(readPAR(treesfile,"x0"))
-		Y0 <- try(readPAR(treesfile,"y0"))
-		Xmax <- readPAR(treesfile,"xmax")
-		Ymax <- readPAR(treesfile,"ymax")
+		X0 <- readPAR(treesfile,"x0","plot", fail=FALSE)
+		if(is.na(X0))X0 <- 0
+		Y0 <- readPAR(treesfile,"y0","plot",fail=FALSE)
+		if(is.na(Y0))Y0 <- 0
+		
+		Xmax <- readPAR(treesfile,"xmax","plot")
+		Ymax <- readPAR(treesfile,"ymax","plot")
 		addarrow(x0=X0 + 0.1*Xmax,y0=Y0 + 0.1*Ymax,
 			 len=0.1*(Ymax-X0),bearing=Bearing)
    }

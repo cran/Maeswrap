@@ -2,8 +2,8 @@
 function(filename="met.dat", nlines=-1){
 
 	metlines <- readLines(filename)
-	namesloc <- grep("columns",tolower(metlines))
-	namesloc <- setdiff(namesloc,grep("nocolumns",metlines))
+	namesloc <- grep("^columns",tolower(metlines))
+	# namesloc <- setdiff(namesloc,grep("nocolumns",metlines))
 	
 	namesline <- metlines[namesloc]
 	datastart <- grep("DATA STARTS", metlines)
@@ -13,6 +13,7 @@ function(filename="met.dat", nlines=-1){
 	NAMES <- do.call("c", strsplit(NAMES, " ", fixed=TRUE))
 	metdata <- read.table(filename, header=FALSE, skip=datastart, nrows=nlines)
 	names(metdata) <- NAMES
+	names(metdata)[names(metdata) == "RH%"] <- "RHperc"
 
 return(metdata)
 }

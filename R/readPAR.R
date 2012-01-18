@@ -28,7 +28,7 @@ function(datfile, parname, namelist=NA,fail=TRUE){
 
 		# nth element of the namelist
 		# if values separated by /n, here separate elements of the vector!
-		parloc <- grep(paste(tolower(parname),"$",sep=""), trim(datlines_namelist)) #+ namelist_loc - 1
+		parloc <- grep(tolower(parname), trim(datlines_namelist)) #+ namelist_loc - 1
 
 		if(length(parloc)==0){
 			if(fail)stop(paste("Cannot find",parname,"in",datfile,"in the namelist",namelist,"\n"))

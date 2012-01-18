@@ -22,7 +22,8 @@ Plotstand(treesfile="trees.dat", strfile="str.dat",
 crownshape=c("cone","ellipsoid","round",
 	"halfellipsoid","paraboloid","cylinder"), 
 readstrfiles=TRUE,targethighlight=TRUE,
-addNarrow=TRUE, xyaxes=TRUE,labcex=1,axiscex=1,...)
+addNarrow=TRUE, xyaxes=TRUE,labcex=1,axiscex=1,
+verbose=FALSE,...)
 Openstand(treesfile="trees.dat")
 plottree(crownshape=c("cone","elipsoid","ellipsoid","round",
 	"halfellipsoid","paraboloid","cylinder"), 
@@ -41,6 +42,7 @@ coord3dshape(crownshape=c("cone","ellipsoid","halfellipsoid",
   \item{xyaxes}{Logical. Add annotated X and Y axes?}
   \item{labcex}{Relative size of X and Y axis labels.}
   \item{axiscex}{Relative size of X and Y axis annotation.}
+  \item{verbose}{If TRUE, writes more info to the screen while plotting.}
   \item{CL}{Crown length (m).}
   \item{CW}{Crown width (m).}
   \item{readstrfiles}{Read the 'str.dat' file(s) to find out crown shape?}

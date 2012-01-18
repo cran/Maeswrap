@@ -10,11 +10,11 @@ plottree <- function(crownshape=c("cone","elipsoid","ellipsoid","round","halfell
     dbase <- dbh * (H / (H - 1.3))
 	if(!is.finite(dbase))dbase <- dbh
 	
+	# tree crown
 	m1 <- coord3dshape(shape,CW=CW,CL=CL,z0=HCB,x0=X,y0=Y,nz=nz,nalpha=nalpha)
-	m2 <- coord3dshape("cone",CW=dbase,CL=H,z0=0,x0=X,y0=Y,nz=nz,nalpha=nalpha)
 	
-	# if(any(!is.finite(m1)))browser()
-	# if(any(!is.finite(m2)))browser()
+	# stem
+	m2 <- coord3dshape("cone",CW=dbase,CL=H,z0=0,x0=X,y0=Y,nz=nz,nalpha=nalpha)
 	
 	plot3dtriangles(m1, col=crowncolor,...)
 	plot3dtriangles(m2, col=stemcolor,...)
