@@ -27,15 +27,15 @@ Plotstand <- function(treesfile="trees.dat",
 	}
 	
 	if(!haveconfile){
-		warning("Guessing str file is str.dat\n")
-		strfiles <- "str.dat"
+		# warning("Guessing str file is str.dat\n")
+		strfiles <- strfile
 	} else {
-		strfiles <- readPAR("confile.dat","strfiles",fail=FALSE)
+		strfiles <- readPAR("confile.dat","strfiles","species",fail=FALSE)
 		if(all(is.na(strfiles)))
-			strfiles <- "str.dat"
+			strfiles <- strfile
 		else {
-			x <- strsplit(strfiles," ")
-			strfiles <- gsub("'","",delempty(x[[1]]))
+			# x <- strsplit(strfiles," ")
+			strfiles <- gsub("'","",strfiles) #delempty(x[[1]]))
 		}
 	}
 	

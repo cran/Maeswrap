@@ -36,7 +36,7 @@ function(x0,y0,len,bearing,headlen=0.2*len,headangle=25,Nlabel=TRUE,
 	if(Nlabel){
 		xN <- x0 + len*0.1*cos(bearing)
 		yN <- y0 + len*0.1*sin(bearing)
-		if(addto == "rgl")text3d(x=xN,y=yN,z=0,text="N")
+		if(addto == "rgl")text3d(x=xN,y=yN,z=0,texts="N")
 		if(addto == "plot")text(x=xN,y=yN,labels="N")
 		if(addto == "lattice")ltext(x=xN,y=yN,labels="N")	
 	}
