@@ -1,3 +1,5 @@
+#' @export
+#' @rdname Plotstand
 plottree <- function(crownshape=c("cone","elipsoid","ellipsoid","round","halfellipsoid","paraboloid","cylinder"), 
 	CL=1, CW=1, HCB=1, X=0, Y=0, dbh=0.3, crowncolor="forestgreen", stemcolor="brown",
     nz=25, nalpha=25,

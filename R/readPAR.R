@@ -1,71 +1,61 @@
-`readPAR` <-
-function(datfile, parname, namelist=NA,fail=TRUE){
+#' Reads the value of a parameter in a MAESTRA/MAESPA input file.
+#' 
+#' @description The \code{readPAR} function reads the value of any parameter in a namelist
+#' in one of the MAESTRA/MAESPA input files.  Also works for other text files
+#' that have the FORTRAN namelist input structure.  Optionally specifies in
+#' which namelist to look for the parameter.
+#' 
+#' To read an entire namelist into a list, use the \code{readNameList}
+#' function.
+#' 
+#' 
+#' @param parname Name of the parameter.
+#' @param fail Logical. If TRUE, stops with an error when parameter is not
+#' found (if FALSE, returns NA)
+#' @return For \code{readPAR}, either one value, or a vector, depending on how
+#' many values are specified for the parameter in the input file.
+#' 
+#' For \code{readNameList}, a named list.
+#' @author Remko Duursma. Thanks to Andreas Ibrom for reporting a bug.
+#' @seealso \code{\link{replacePAR}}, \code{\link{readNameList}}
+#' @keywords utilities
+#' @examples
+#' 
+#' 
+#' \dontrun{
+#' # Read the number of trees in the plot:
+#' readPAR("confile.dat", "notrees", "plot")
+#' 
+#' # Read the X and Y coordinates:
+#' readPAR("confile.dat", "xycoords", "xy")
+#' 
+#' # Read entire namelist
+#' readNameList("trees.dat", "plot")
+#' 
+#' }
+#' 
+#' @export
+#' @rdname readNameList
+readPAR <- function(datfile, parname, namelist=NA,fail=TRUE){
 
-	# read the file
-	dat_lines <- tolower(readLines(datfile))
-	parname <- paste("^", tolower(parname),sep="")
-	if(!is.na(namelist))namelist <- tolower(namelist)
-
-	# If namelist is not NA, find the parameter within some namelist.
-	# (otherwise find the parameter by its name).
-	namelist_loc <- 0
-	if(!is.na(namelist)){
-
-		nl <- paste("&", namelist, "$", sep="")
-		namelist_loc <- grep(nl, trim(dat_lines))
-		if(length(namelist_loc)==0){
-			if(fail)stop("Can't find namelist\n")
-			if(!fail)return(NA)
-		}
-		
-		namelist_end <- NA
-		k <- 1
-		while(is.na(namelist_end)){
-         if(Maeswrap::trim(dat_lines[namelist_loc + k]) == "/")namelist_end <- k
-         k <- k + 1
-        }
-		datlines_namelist <- tolower(dat_lines[namelist_loc:(namelist_loc + namelist_end)])
-
-		# nth element of the namelist
-		# if values separated by /n, here separate elements of the vector!
-		parloc <- grep(tolower(parname), trim(datlines_namelist)) #+ namelist_loc - 1
-
-		if(length(parloc)==0){
-			if(fail)stop(paste("Cannot find",parname,"in",datfile,"in the namelist",namelist,"\n"))
-			if(!fail)return(NA)
-		}
-
-		# paste everything starting from the parname to end of namelist into a string
-		parvalues <- paste(datlines_namelist[parloc:(length(datlines_namelist)-1)], collapse="\t")
-		
-		# split by "=", and then by "\t"
-		s <- strsplit(Maeswrap::trim(parvalues), "=")[[1]][2]
-		s2 <- delempty(strsplit(s, "\t")[[1]])
-		
-		# Further splitting by " " for values (partially) in one row.
-		s2 <- delempty(unlist(strsplit(s2, " ")))
-	
-		options(warn=-1)
-		val <- as.numeric(s2)
-		if(all(is.na(val)))val <- s2
-		val <- val[!is.na(val)]
-		options(warn=0)
-	}
-
-	# only parameter name provided
-	if(is.na(namelist)){
-		parloc <- grep(paste(parname,"$",sep=""), trim(dat_lines))
-		if(length(parloc)==0){
-			if(fail)stop(paste("Cannot find",parname,"in",datfile,"\n"))
-			if(!fail)return(NA)
-		}
-		s <- strsplit(Maeswrap::trim(dat_lines[parloc]), "=")[[1]]
-		options(warn=-1)
-		val <- as.numeric(s[length(s)])
-		if(all(is.na(val)))val <- s[length(s)]
-		options(warn=0)
-	}
-	
-return(val)
+  # Read entire file
+  p <- parseFile(datfile)
+  
+  if(is.na(namelist)){
+    # Find parameter
+    res <- unlist(unname(lapply(p, "[[", parname)))
+  } else {
+    
+    if(!tolower(namelist) %in% tolower(names(p)) && fail)
+      stop("Namelist ",namelist," not found")
+    
+    res <- p[[namelist]][[parname]]
+  }
+  
+  if(is.null(res) && fail)stop("Parameter not found.")
+  if(is.null(res) && !fail)res <- NA
+  
+  return(res)
 }
+
 

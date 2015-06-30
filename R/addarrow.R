@@ -1,5 +1,9 @@
-"addarrow" <- 
-function(x0,y0,len,bearing,headlen=0.2*len,headangle=25,Nlabel=TRUE,
+#' @importFrom lattice lsegments
+#' @importFrom lattice ltext
+#' @importFrom rgl lines3d
+#' @importFrom graphics segments
+#' @importFrom graphics text
+addarrow <- function(x0,y0,len,bearing,headlen=0.2*len,headangle=25,Nlabel=TRUE,
 	addto=c('rgl','plot','lattice'),...){
 
 	addto <- match.arg(addto)
@@ -17,11 +21,9 @@ function(x0,y0,len,bearing,headlen=0.2*len,headangle=25,Nlabel=TRUE,
 	y3 <- y1 - headlen*sin(headangle - bearing)
 
 	if(addto=="rgl"){
-	 r <- require(rgl, quietly=TRUE)
-	 if(!r)stop("Install the rgl package\n")
-	 lines3d(x = c(x0,x1), y=c(y0,y1), z=c(0,0), ...)
-	 lines3d(x = c(x1,x2), y=c(y1,y2), z=c(0,0), ...)
-	 lines3d(x = c(x1,x3), y=c(y1,y3), z=c(0,0), ...)
+	  lines3d(x = c(x0,x1), y=c(y0,y1), z=c(0,0), ...)
+	  lines3d(x = c(x1,x2), y=c(y1,y2), z=c(0,0), ...)
+	  lines3d(x = c(x1,x3), y=c(y1,y3), z=c(0,0), ...)
 	}
 	if(addto=="lattice"){
 	 lsegments(x0,y0,x1,y1,...)	
